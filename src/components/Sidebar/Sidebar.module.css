@@ -1,0 +1,70 @@
+.sidebar {
+  border-radius: 10px;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 10%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.sidebar h3 {
+  margin: 2%;
+  margin-left: 2%;
+}
+
+.sidebar h4 {
+  margin: 2%;
+  margin-left: 6%;
+  color: white;
+  font-weight: 800;
+}
+
+.red {
+  background-color: #8f2b1c;
+}
+
+.red h3 {
+  color: #e65831;
+}
+
+.blue {
+  background-color: #3284a3;
+}
+
+.blue h3 {
+  color: #7bcae9;
+}
+
+.reverse {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: row-reverse;
+          flex-direction: row-reverse;
+}
+
+.profiler {
+  padding-right: 0;
+  padding-left: 10%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-right: 10%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.profiler img {
+  width: 9vw;
+  height: 5.805vw;
+}
+/*# sourceMappingURL=Sidebar.module.css.map */

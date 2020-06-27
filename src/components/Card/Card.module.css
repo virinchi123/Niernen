@@ -1,0 +1,14 @@
+.card {
+  background-image: url("../../assets/card-red.png");
+  background-size: contain;
+  width: 9vw;
+  height: 5.805vw;
+}
+
+.card p {
+  text-align: center;
+  position: relative;
+  top: 2.2em;
+  font-family: "Lato", sans-serif;
+}
+/*# sourceMappingURL=Card.module.css.map */

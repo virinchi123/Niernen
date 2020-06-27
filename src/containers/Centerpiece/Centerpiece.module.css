@@ -1,0 +1,57 @@
+.center {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.center h2 {
+  background-color: white;
+  border-radius: 10px;
+  text-transform: capitalize;
+  padding: 1.5%;
+  font-weight: 700;
+  margin-top: 0;
+}
+
+.center .bottomText {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+.center .bottomText h2 {
+  margin: 0;
+}
+
+.center .bottomText .clue {
+  padding: 4%;
+  text-transform: uppercase;
+  margin: 1em;
+  background-color: white;
+  border-radius: 10px;
+  font-weight: 700;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.center .bottomText .number {
+  padding: 4%;
+  text-transform: uppercase;
+  margin: 1em;
+  background-color: white;
+  border-radius: 10px;
+  font-weight: 700;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+/*# sourceMappingURL=Centerpiece.module.css.map */

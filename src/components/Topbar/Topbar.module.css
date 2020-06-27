@@ -1,0 +1,115 @@
+.topbar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 1%;
+}
+
+.topbar .playerTracker {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0 1%;
+  border-radius: 100px;
+  background-color: #ffe400;
+  border-top: 2px solid #fff6a5;
+  border-bottom: 2px solid #f3ff00;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0.2rem 0.2rem 1px 0px;
+          box-shadow: rgba(0, 0, 0, 0.5) 0.2rem 0.2rem 1px 0px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  height: 2em;
+}
+
+.topbar .playerTracker img {
+  height: 1em;
+  width: 0.8em;
+}
+
+.topbar .playerTracker div {
+  padding: 0 2px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.topbar .playerTracker div p {
+  margin: 0;
+}
+
+.topbar .rightTop {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  width: 32.7vw;
+}
+
+.topbar .rightTop .resetButton {
+  padding: 0 1%;
+  border-radius: 100px;
+  background-color: #ffe400;
+  border-top: 2px solid #fff6a5;
+  border-bottom: 2px solid #f3ff00;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0.2rem 0.2rem 1px 0px;
+          box-shadow: rgba(0, 0, 0, 0.5) 0.2rem 0.2rem 1px 0px;
+  height: 2em;
+  width: 150%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.topbar .rightTop .resetButton p {
+  margin: 0;
+}
+
+.topbar .rightTop .profile {
+  width: 200%;
+  margin-left: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  border-radius: 100px;
+  background-color: #ff881e;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0.2rem 0.2rem 1px 0px;
+          box-shadow: rgba(0, 0, 0, 0.5) 0.2rem 0.2rem 1px 0px;
+  border-top: 2px solid;
+  padding: 0 1%;
+  height: 35px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.topbar .rightTop .profile p {
+  margin: 0;
+  text-align: center;
+}
+/*# sourceMappingURL=Topbar.module.css.map */

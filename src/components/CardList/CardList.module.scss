@@ -1,0 +1,9 @@
+$cardWidth: 9vw;
+$cardHeight: 0.645* $cardWidth;
+
+.playmat{
+    display: grid;
+    grid-template-columns: repeat(5,$cardWidth);
+    gap:0.4em;
+    grid-auto-rows: max-content;
+}

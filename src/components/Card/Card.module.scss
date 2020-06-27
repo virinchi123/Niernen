@@ -1,0 +1,20 @@
+$Lato: 'Lato', sans-serif;
+$cardWidth: 9vw;
+$cardHeight: 0.645* $cardWidth;
+
+// $cardHeight: 13.11vh;
+// $cardWidth: 1.55*$cardHeight;
+
+.card{
+    background-image: url("../../assets/card-red.png");
+    background-size: contain;
+    width: $cardWidth;
+    height: $cardHeight;
+    
+    p{
+        text-align: center;
+        position: relative;
+        top: 2.2em;
+        font-family: $Lato;
+    }
+}

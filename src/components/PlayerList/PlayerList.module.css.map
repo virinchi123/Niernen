@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "PlayerList.module.scss"
+    ],
+    "names": [],
+    "file": "PlayerList.module.css"
+}

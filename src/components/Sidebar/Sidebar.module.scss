@@ -1,0 +1,67 @@
+$cardWidth: 9vw;
+$cardHeight: 0.645* $cardWidth;
+
+$colors:(
+    buttonYellow: rgb(255,228,0),
+    borderYellowBottom:rgb(243,287,0),
+    borderYellowTop:rgb(255,246,165),
+    buttonOrange: rgb(255,136,30),
+    lightRed: rgb(230,88,49),
+    darkRed: rgb(117,35,23),
+    lightBlue: rgb(123,202,233),
+    teamRed: rgb(143,43,28),
+    teamBlue: rgb(50,132,163)
+);
+
+@function color($color){
+    @return map-get($map: $colors, $key: $color)
+};
+
+.sidebar{
+            border-radius: 10px;
+            align-self: flex-start;
+            display: flex;
+            flex-direction: column;
+            padding: 10%;
+            box-sizing: border-box;
+
+            h3{
+                margin: 2%;
+                margin-left: 2%;
+            }
+
+            h4{
+                margin:2%;
+                margin-left: 6%;
+                color: white;
+                font-weight: 800;
+            }
+        }
+.red{
+    background-color: color(teamRed);
+    h3{
+        color: color(lightRed);
+    }
+}
+.blue{
+    background-color: color(teamBlue);
+    h3{
+        color: color(lightBlue);
+    }
+}
+
+.reverse{
+    flex-direction: row-reverse;
+}
+.profiler{
+    padding-right: 0;
+    padding-left: 10%;
+    display: flex;
+    justify-content: space-between;
+    padding-right: 10%;
+    box-sizing: border-box;
+    img{
+        width: $cardWidth;
+        height: $cardHeight;
+    }
+}

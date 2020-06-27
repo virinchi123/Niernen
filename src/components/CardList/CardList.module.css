@@ -1,0 +1,10 @@
+.playmat {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (9vw)[5];
+      grid-template-columns: repeat(5, 9vw);
+  gap: 0.4em;
+  grid-auto-rows: -webkit-max-content;
+  grid-auto-rows: max-content;
+}
+/*# sourceMappingURL=CardList.module.css.map */
