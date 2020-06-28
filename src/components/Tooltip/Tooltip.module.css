@@ -1,0 +1,49 @@
+.tooltip {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  text-align: left;
+  text-align: start;
+  text-shadow: none;
+  word-break: normal;
+  display: inline-block;
+}
+
+.bottom {
+  margin-top: 5px;
+}
+
+.tooltipArrow {
+  top: 50%;
+  left: 0;
+  margin-top: -5px;
+  border-width: 5px 5px 5px 0;
+  border-right-color: #000;
+}
+
+.tooltip.bottom .tooltipArrow {
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: #000;
+}
+
+#tooltip .tooltipArrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-right-color: transparent;
+  border-style: solid;
+}
+
+.tooltip .tooltipLabel {
+  max-width: 200px;
+  padding: 3px 8px;
+  color: #fff;
+  text-align: center;
+  background-color: #000;
+  border-radius: 4px;
+}
+/*# sourceMappingURL=Tooltip.module.css.map */

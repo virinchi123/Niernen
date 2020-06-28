@@ -1,0 +1,52 @@
+.container{
+    width:50vw;
+    border-radius: 20px;
+    border: 10px solid black;
+    padding: 0%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 1%;
+    box-sizing: border-box;
+
+    .disabled{
+        background-color: rgb(170, 152, 152);
+            border:none;
+
+        &:hover{
+            cursor: not-allowed;
+        }
+    }
+}
+
+.submitButton{
+
+    padding: 2%;
+    border-radius: 10px;
+    align-self: center;
+    display: inline-block;
+    margin-top: 2%;
+    box-sizing: border-box;
+
+
+    background-color: rgba(0,0,0,0);
+    border: 2px solid black;
+
+    p{
+        color: black;
+    }
+    
+    p{
+        font-size: 0.8em;
+        margin: 0;
+    }
+
+    &:hover{
+        cursor: pointer;
+    }
+
+    &:focus{
+        background-color: #ccc;
+        outline: none;
+    }
+}

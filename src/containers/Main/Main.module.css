@@ -3,4 +3,10 @@
   display: grid;
       grid-template-areas: "topbar topbar topbar" "leftcol center rightcol";
 }
+
+.rightcol {
+  -ms-grid-row: 2;
+  -ms-grid-column: 3;
+  grid-area: rightcol;
+}
 /*# sourceMappingURL=Main.module.css.map */

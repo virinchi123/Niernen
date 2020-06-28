@@ -3,7 +3,6 @@ import playerIcon from '../../assets/icon_player.png';
 import classes from './Topbar.module.css';
 
 const Topbar = props=>{
-    console.log(props.gridArea)
     return(
         <div className={classes.topbar} style={{gridArea:`${props.gridArea}`}}>
             <div className={classes.playerTracker}>
@@ -14,15 +13,15 @@ const Topbar = props=>{
                     <img src={playerIcon} alt="player icon"/>
                 </div>
                     <div className={classes.count}>
-                        <p>2</p>
+                        <p>{props.players}</p>
                     </div>
                 </div>
                 <div className={classes.rightTop}>
                     <div className={classes.resetButton}>
                         <p>Reset Game</p>
                     </div>
-                    <div className={classes.profile}>
-                        <p>Soc-Red Spymaster</p>
+                    <div className={classes.profile} onClick={props.formFunction}>
+                        <p>{props.userState.nickname}-{props.userState.team} {props.userState.role}</p>
                     </div>
                 </div>
             </div>

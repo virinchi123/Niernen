@@ -23,8 +23,8 @@ const Sidebar=props=>{
                 {imageCode}
                 <h1>{props.number}</h1>
             </div>
-            <PlayerList type="Operatives" names={['dummy1','dummy 2']}/>
-            <PlayerList type="Spymasters" names={['Master dummy']}/>
+            <PlayerList type="Operatives" names={props.operatives}/>
+            <PlayerList type="Spymasters" names={props.spymasters}/>
         </div>
     )
 }
