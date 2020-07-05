@@ -17,7 +17,7 @@ const Topbar = props=>{
                     </div>
                 </div>
                 <div className={classes.rightTop}>
-                    <div className={classes.resetButton}>
+                    <div className={classes.resetButton} onClick={props.resetFunction}>
                         <p>Reset Game</p>
                     </div>
                     <div className={classes.profile} onClick={props.formFunction}>
