@@ -1,39 +1,36 @@
-import React,{useState} from 'react';
+import React from 'react';
 import classes from './Centerpiece.module.css'
 import CardList from '../../components/CardList/CardList';
 
 const Centerpiece = props=>{
-    const [botState,updateBotState]=useState({
-        clue:'bot',
-        number:'2'
-    })
+
     const clueChangedHandler = event => {
-        updateBotState({
-            number: botState.number,
+        props.changeBotState({
+            number: props.botState.number,
             clue: event.target.value
         })
     }
 
     const numberChangedHandler = event => {
-        console.log('number: '+botState.number)
-        updateBotState({
-            clue:botState.clue,
+        console.log('number: '+props.botState.number)
+        props.changeBotState({
+            clue:props.botState.clue,
             number: event.target.value
         })
-        console.log('number: ' + botState.number)
+        console.log('number: ' + props.botState.number)
     }
 
     const giveClue = props=>{
-        let array=[props.user.team.toLowerCase(),'clue',props.user.nickname,botState.clue,botState.number]
+        let array=[props.user.team.toLowerCase(),'clue',props.user.nickname,props.botState.clue,props.botState.number]
         props.logFunction(array)
         props.nextFunction()
     }
 
-    const words = ['word1', 'word2', 'word3', 'word4', 'word5', 'word6', 'word7', 'word8', 'word9', 'word10', 'word11', 'word12', 'word13', 'word14', 'word15', 'word16', 'word17', 'word18', 'word19', 'word20', 'word21', 'word22', 'word23', 'word24', 'word25']
+    const words = props.words;
     let topCode=null;
     let botCode=null;
     let topText=null;
-    console.log(props)
+    console.log(props.botState.number)
     switch(props.status){
         case 1:
             topText='The Blue Spymaster is giving a clue';
@@ -60,10 +57,10 @@ const Centerpiece = props=>{
         botCode = (
             <div className={classes.bottomText}>
                 <div className={classes.clue}>
-                    <h2>{botState.clue}</h2>
+                    <h2>{props.botState.clue}</h2>
                 </div>
                 <div className={classes.number}>
-                    <h2>{botState.number}</h2>
+                    <h2>{props.botState.number}</h2>
                 </div>
 
             </div>
@@ -104,7 +101,7 @@ topCode=<h2>{topText}</h2>
     return(
         <div className={classes.center} style={{ gridArea: `${props.gridArea}` }}>
             {topCode}
-            <CardList words={words} gridArea='center' logFunction={props.logFunction} user={props.user} nextFunction={props.nextFunction} status={props.status} taps={botState.number}/>
+            <CardList serverState={props.serverState} words={words} gridArea='center' logFunction={props.logFunction} user={props.user} nextFunction={props.nextFunction} status={props.status} taps={props.botState.number}/>
             {botCode}
         </div>
     )

@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import TopBar from '../../components/Topbar/Topbar';
 import classes from './Main.module.css';
@@ -8,6 +8,9 @@ import Modal from '../../components/Modal/Modal';
 import FormElement from '../../components/FormElement/FormElement';
 import blueBG from '../../assets/bg-blue.jpg'
 import redBG from '../../assets/bg-red.jpg'
+const io = require('socket.io-client')
+const socket = io('http://localhost:8080')
+
 
 const Main = props=>{
 
@@ -17,15 +20,21 @@ const Main = props=>{
         role:'Operative'
     })
 
+    const [serverState,updateServerState]=useState({
+        words:[],
+        reveal:[],
+        types:[]
+    })
+
     const [modalState,updateModalState]=useState({
         show:false
     })
 
-    const [operativesState,updateOperativesState]=useState({
-        blueOperatives:['bluePlayer1','bluePlayer2'],
-        blueSpymasters:['blueSpymaster'],
-        redOperatives:['virinchi','dummy2'],
-        redSpyMasters:['redSpyMaster']
+    const [operativesState,updatedOperativesState]=useState({
+        blueOperatives:[],
+        blueSpymasters:[],
+        redOperatives:['virinchi'],
+        redSpyMasters:[]
     })
 
     const [gameState,updateGameState]=useState({
@@ -36,6 +45,268 @@ const Main = props=>{
         messages :[['red', 'clue', 'masterDummy', 'SDF', '2'], ['red', 'tap', 'dummy1', 'board'], ['red', 'tap', 'dummy2', 'film']]
     })
 
+    const updateOperativesState = data=>{
+        updatedOperativesState({
+            blueOperatives: data.blueOperatives,
+            redOperatives: data.redOperatives,
+            blueSpymasters: data.blueSpymasters,
+            redSpyMasters: data.redSpyMasters
+        });
+    }
+
+    const [wordState,updateWordState]=useState({
+        words:[]
+    })
+
+    const [botState, updateBotState] = useState({
+        clue: 'bot',
+        number: '2'
+    })
+
+    useEffect(()=>{
+        socket.emit('join', {
+            id: socket.id, user: {
+                nickname: 'virinchi',
+                team: 'Red',
+                role: 'Operative'
+            }})
+        socket.on('words-ready',data=>{
+            console.log(data)
+            updateServerState({
+                words:data.words,
+                reveal:data.reveal,
+                types:data.types
+            })
+            updateWordState({words:data.words})
+        })
+        socket.on('currentStatus',status=>{
+            updateGameState({status:status})
+        })
+
+    },[])
+
+    socket.off('currentPlayers').on('currentPlayers',data=>{
+        const redOps = [];
+        const blueOps=[];
+        const redSpy=[];
+        const blueSpy=[];
+        data.forEach(player=>{
+            if(player.team==='Red'){
+                if(player.role==='Operative'){
+                    redOps.push(player.name)
+                }
+                else{
+                    redSpy.push(player.name)
+                }
+            }else{
+                if (player.role === 'Operative') {
+                    blueOps.push(player.name)
+                }
+                else {
+                    blueSpy.push(player.name)
+                }
+            }
+        })
+        const obj={
+            redOperatives:redOps,
+            blueOperatives:blueOps,
+            redSpyMasters:redSpy,
+            blueSpymasters:blueSpy
+        }
+        updateOperativesState(obj)
+    })
+
+    socket.off('addUser').on('addUser',user=>{
+        if(user.team==='Red'){
+            if(user.role==='Operative'){
+                updateOperativesState({
+                    ...operativesState,
+                    redOperatives:[...operativesState.redOperatives,user.name]})
+            }
+            else{
+                updateOperativesState({
+                    ...operativesState,
+                    redSpyMasters: [...operativesState.redSpyMasters, user.name]
+                })
+            }
+        }else{
+            if(user.role==='Operative'){
+                updateOperativesState({
+                    ...operativesState,
+                    blueOperatives: [...operativesState.blueOperatives, user.name]
+                })
+            }
+            else{
+                updateOperativesState({
+                    ...operativesState,
+                    blueSpymasters: [...operativesState.blueSpymasters, user.name]
+                })
+            }
+        }
+        //console.log(dummyState)
+        //updateOperativesState({...dummyState})
+    })
+
+    socket.off('removeUser').on('removeUser',user=>{
+        let dummyState = {...operativesState}
+        let index
+        if (user.team === 'Red') {
+            if (user.role === 'Operative') {
+                index=dummyState.redOperatives.findIndex(el=>el===user.name)
+                dummyState.redOperatives.splice(index,1)
+            }
+            else {
+                index = dummyState.redSpyMasters.findIndex(el => el === user.name)
+                dummyState.redSpyMasters.splice(index, 1)
+            }
+        } else {
+            if (user.role === 'Operative') {
+                index = dummyState.blueOperatives.findIndex(el => el === user.name)
+                dummyState.blueOperatives.splice(index, 1)
+            }
+            else {
+                index = dummyState.blueSpymasters.findIndex(el => el === user.name)
+                dummyState.blueSpymasters.splice(index, 1)
+            }
+        }
+        updateOperativesState({ ...dummyState })
+    })
+
+    socket.off('changeName').on('changeName',({oldName,user})=>{
+        //let dummyState = {...operativesState}
+        console.log('name change request')
+        //let index
+        console.log(user)
+        if (user.team === 'Red') {
+            if (user.role === 'Operative') {
+                //index = operativesState.redOperatives.findIndex(el => {console.log(el);return el === oldName})
+                //dummyState.redOperatives[index]=user.name;
+                updateOperativesState({
+                    ...operativesState,
+                    redOperatives:[...operativesState.redOperatives.filter(el=>(el!==oldName&&el!==user.name)),user.name]
+                })
+            }
+            else {
+                //index = dummyState.redSpyMasters.findIndex(el => el === oldName)
+                //dummyState.redSpyMasters[index] = user.name;
+                updateOperativesState({
+                    ...operativesState,
+                    redSpyMasters: [...operativesState.redSpyMasters.filter(el => el !== oldName), user.name]
+                })
+            }
+        } else {
+            if (user.role === 'Operative') {
+                //index = dummyState.blueOperatives.findIndex(el => el === oldName)
+                //dummyState.blueOperatives[index] = user.name;
+                updateOperativesState({
+                    ...operativesState,
+                    blueOperatives: [...operativesState.blueOperatives.filter(el => el !== oldName), user.name]
+                })
+            }
+            else {
+                //index = dummyState.blueSpymasters.findIndex(el => el === oldName)
+                //dummyState.blueSpymasters[index] = user.name;
+                updateOperativesState({
+                    ...operativesState,
+                    blueSpymasters: [...operativesState.blueSpymasters.filter(el => el !== oldName), user.name]
+                })
+            }
+        }
+        //console.log(dummyState)
+        //updateOperativesState({ ...dummyState })
+    })
+
+    socket.off('isSpymaster').on('isSpymaster',user=>{
+        let dummyState = {...operativesState}
+        //console.log(user)
+        let index
+        if (user.team === 'Red') {
+            if (user.role === 'Operative') {
+                index = dummyState.redOperatives.findIndex(el => el === user.nickname)
+                dummyState.redOperatives.splice(index, 1)
+                dummyState.redSpyMasters.push(user.nickname)
+            }
+        } else {
+            if (user.role === 'Operative') {
+                index = dummyState.blueOperatives.findIndex(el => el === user.nickname)
+                dummyState.blueOperatives.splice(index, 1)
+                dummyState.blueSpymasters.push(user.nickname)
+            }
+        }
+        updateOperativesState({ ...dummyState })
+    })
+
+    socket.off('isOperative').on('isOperative',user=>{
+        let dummyState = {...operativesState}
+        let index
+        if (user.team === 'Red') {
+            if (user.role === 'Spymaster') {
+                index = dummyState.redSpyMasters.findIndex(el => el === user.nickname)
+                dummyState.redSpyMasters.splice(index, 1)
+                dummyState.redOperatives.push(user.nickname)
+            }
+        } else {
+            if (user.role === 'Spymaster') {
+                index = dummyState.blueSpymasters.findIndex(el => el === user.nickname)
+                dummyState.blueSpymasters.splice(index, 1)
+                dummyState.blueOperatives.push(user.nickname)
+            }
+        }
+        updateOperativesState({ ...dummyState })
+    })
+
+    socket.off('teamSwitched').on('teamSwitched',user=>{
+        console.log(user)
+        let dummyState = {...operativesState}
+        let index
+        if (user.team === 'Red') {
+            if (user.role === 'Operative') {
+                index = dummyState.redOperatives.findIndex(el => el === user.nickname)
+                dummyState.redOperatives.splice(index, 1)
+                dummyState.blueOperatives.push(user.nickname)
+            }
+            else {
+                index = dummyState.redSpyMasters.findIndex(el => el === user.nickname)
+                dummyState.redSpyMasters.splice(index, 1)
+                dummyState.blueSpymasters.push(user.nickname)
+            }
+        } else {
+            if (user.role === 'Operative') {
+                index = dummyState.blueOperatives.findIndex(el => el === user.nickname)
+                dummyState.blueOperatives.splice(index, 1)
+                dummyState.redOperatives.push(user.nickname)
+            }
+            else {
+                index = dummyState.blueSpymasters.findIndex(el => el === user.nickname)
+                dummyState.blueSpymasters.splice(index, 1)
+                dummyState.redSpyMasters.push(user.nickname)
+            }
+        }
+        updateOperativesState({ ...dummyState })
+    })
+
+    socket.off('updateProgress').on('updateProgress',status=>{
+        console.log(status)
+        console.log(wordState)
+        updateGameState({
+            status:parseInt(status)
+        })
+    })
+
+    socket.off('giveClue').on('giveClue',data=>{
+        updateBotState(data);
+    })
+
+    socket.off('logMessage').on('logMessage',array=>{
+        const dummyState = { ...logState };
+        dummyState.messages.push(array);
+        console.log(dummyState.messages)
+        updateLogState({
+            messages: dummyState.messages
+        })
+    })
+
+
     const addLogMessage=array=>{
         const dummyState={...logState};
         dummyState.messages.push(array);
@@ -43,6 +314,7 @@ const Main = props=>{
         updateLogState({
             messages:dummyState.messages
         })
+        socket.emit('addLog',array)
     }
 
     const noModal=props=>{
@@ -62,10 +334,35 @@ const Main = props=>{
             ...userState,
             nickname: event.target.value
         })
+        let dummyState = {...operativesState}
+        let index
+        let user={...userState}
+        if (user.team === 'Red') {
+            if (user.role === 'Operative') {
+                index = dummyState.redOperatives.findIndex(el => el === user.nickname)
+                dummyState.redOperatives[index]=event.target.value
+            }
+            else {
+                index = dummyState.redSpyMasters.findIndex(el => el === user.nickname)
+                dummyState.redSpyMasters[index] = event.target.value
+            }
+        } else {
+            if (user.role === 'Operative') {
+                index = dummyState.blueOperatives.findIndex(el => el === user.nickname)
+                dummyState.blueOperatives[index] = event.target.value
+            }
+            else {
+                index = dummyState.blueSpymasters.findIndex(el => el === user.nickname)
+                dummyState.blueSpymasters[index] = event.target.value
+            }
+        }
+        updateOperativesState({ ...dummyState })
+        socket.emit('nameChanged',event.target.value)
     }
 
     const progressFunction = props=>{
         console.log('progressing')
+        socket.emit('progress')
         if(gameState.status===1){
             updateGameState({
                 status:3
@@ -99,8 +396,8 @@ const Main = props=>{
         })
         const dummyState={...operativesState};
         if(usState.team==='Red'){
-            dummyState.redOperatives=removeFromList(dummyState.redOperatives,userState.nickname);
-            dummyState.redSpyMasters.push(userState.nickname)
+            dummyState.redOperatives=removeFromList(dummyState.redOperatives,usState.nickname);
+            dummyState.redSpyMasters.push(usState.nickname)
             updateOperativesState(dummyState)
         }
         else{
@@ -109,6 +406,9 @@ const Main = props=>{
             dummyState.blueSpymasters.push(userState.nickname)
             updateOperativesState(dummyState)
         }
+        console.log(dummyState)
+        console.log(operativesState)
+        socket.emit('becomeSpymaster',usState)
     }
 
     const becomeOperative = props => {
@@ -131,12 +431,19 @@ const Main = props=>{
             dummyState.blueOperatives.push(userState.nickname)
             updateOperativesState(dummyState)
         }
+        socket.emit('becomeOperative',userState)
+    }
+
+    const changeBotState=data=>{
+        socket.emit('setClue',data);
+        updateBotState(data)
     }
 
     const switchTeams=props=> {
         const team=userState.team;
         const dummyState={...userState}
         const opState={...operativesState}
+        socket.emit('switchTeams',userState)
         if(team==='Red'){
             updateUserState({
                 ...userState,
@@ -183,15 +490,18 @@ const Main = props=>{
 
     const removeFromList = (array,element)=>{
         if(!array.includes(element)){
+            console.log('not found!')
             return array
         }
         else{
+            console.log('removing '+element)
             const altArray=array.filter(el=>el!==element)
             return altArray
         }
     }
 
     console.log(userState)
+    console.log(wordState)
     return(
         <div className={classes.main}>
             <TopBar gridArea='topbar' userState={userState} changeFunction={updateUserState} formFunction={showModal} players={operativesState.blueOperatives.length+operativesState.blueSpymasters.length+operativesState.redOperatives.length+operativesState.redSpyMasters.length}/>
@@ -206,7 +516,7 @@ const Main = props=>{
                     <button className={classes.spyMasterButton} onClick={becomeSpymaster}>Become Spymaster</button>
                     <button className={classes.switchTeamsButton} onClick={switchTeams}>Switch Teams</button>
             </Modal>
-            <Centerpiece gridArea='center' status={gameState.status} clue="bot" number="2" nextFunction={progressFunction} user={userState} logFunction={addLogMessage}/>
+            <Centerpiece serverState={serverState} botState={botState} changeBotState={changeBotState} gridArea='center' words={wordState.words} status={gameState.status} clue="bot" number="2" nextFunction={progressFunction} user={userState} logFunction={addLogMessage}/>
         </div>
     )
 }

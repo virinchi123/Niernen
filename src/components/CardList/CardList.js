@@ -7,9 +7,10 @@ const CardList = props =>{
     let [tapState,updateTapState]=useState({
         taps:parseInt(props.taps)
     })
+    console.log(props)
 
     useEffect(()=>{
-        console.log('updated '+props.taps)
+        //console.log('updated '+props.taps)
         updateTapState({
             taps: parseInt(props.taps)
         })
@@ -45,36 +46,62 @@ const CardList = props =>{
     if(props.status===1||props.status===2){
         if(props.user.role==='Spymaster'){
             cardCode = props.words.map((el, index) => {
-                //console.log(el)
+                let type=props.serverState.types[index]
+                console.log(type)
                 return (
-                    <Card key={index} word={el} type='red' />
+                    <Card key={index} word={el} type={type} reveal={type}/>
                 )
             })
         }
         else{
             cardCode=props.words.map((el,index)=>{
             //console.log(el)
+                let type = props.serverState.types[index]
                 return(
-                    <Card key={index} word={el}/>
+                    <Card key={index} word={el} reveal={type}/>
                 )
     })
         }
     }
     else if(props.status===3){
+        console.log('in here')
         if(props.user.team==='Blue'){
             if(props.user.role==='Spymaster'){
                 cardCode = props.words.map((el, index) => {
                     //console.log(el)
+                    let type = props.serverState.types[index]
                     return (
-                        <Card key={index} word={el} type='red'/>
+                        <Card key={index} word={el} type={type} reveal={type}/>
+                    )
+                })
+            }
+            else{
+                console.log('in herer')
+                cardCode = props.words.map((el, index) => {
+                    //console.log(el)
+                    let type = props.serverState.types[index]
+                    return (
+                        <Card key={index} word={el} click={clickHandler} hover={true} reveal={type}/>
+                    )
+                })
+            }
+        }
+        else{
+            if (props.user.role === 'Spymaster') {
+                cardCode = props.words.map((el, index) => {
+                    //console.log(el)
+                    let type = props.serverState.types[index]
+                    return (
+                        <Card key={index} word={el} type={type} reveal={type} />
                     )
                 })
             }
             else{
                 cardCode = props.words.map((el, index) => {
                     //console.log(el)
+                    let type = props.serverState.types[index]
                     return (
-                        <Card key={index} word={el} click={clickHandler} hover={true}/>
+                        <Card key={index} word={el} hover={true} reveal={type} />
                     )
                 })
             }
@@ -85,16 +112,38 @@ const CardList = props =>{
             if (props.user.role === 'Spymaster') {
                 cardCode = props.words.map((el, index) => {
                     //console.log(el)
+                    let type = props.serverState.types[index]
                     return (
-                        <Card key={index} word={el} type='red' />
+                        <Card key={index} word={el} type={type} reveal={type}/>
                     )
                 })
             }
             else {
                 cardCode = props.words.map((el, index) => {
                     //console.log(el)
+                    let type = props.serverState.types[index]
                     return (
-                        <Card key={index} word={el} click={clickHandler} hover={true}/>
+                        <Card key={index} word={el} click={clickHandler} hover={true} reveal={type}/>
+                    )
+                })
+            }
+        }
+        else{
+            if (props.user.role === 'Spymaster') {
+                cardCode = props.words.map((el, index) => {
+                    //console.log(el)
+                    let type = props.serverState.types[index]
+                    return (
+                        <Card key={index} word={el} type={type} reveal={type}/>
+                    )
+                })
+            }
+            else {
+                cardCode = props.words.map((el, index) => {
+                    //console.log(el)
+                    let type = props.serverState.types[index]
+                    return (
+                        <Card key={index} word={el} hover={true} reveal={type}/>
                     )
                 })
             }
@@ -108,6 +157,7 @@ const CardList = props =>{
             <Card key={index} word={el} click={props.nextFunction}/>
         )
     })*/
+    console.log(cardCode)
     return(
         <div className={classes.playmat} style={{ gridArea: props.gridArea }}>
             {cardCode}

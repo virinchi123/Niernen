@@ -29,6 +29,9 @@ $cardHeight: 0.645* $cardWidth;
 
 .blackCard{
     background-image: url('../../assets/card-black.png');
+    p{
+        color: white;
+    }
 }
 
 .hover{

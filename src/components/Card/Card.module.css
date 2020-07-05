@@ -24,6 +24,10 @@
   background-image: url("../../assets/card-black.png");
 }
 
+.blackCard p {
+  color: white;
+}
+
 .hover:hover {
   cursor: pointer;
 }

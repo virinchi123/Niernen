@@ -27,6 +27,16 @@ const Card = props =>{
         imageSrc=blackImage;
     }
 
+    if (props.reveal === 'red') {
+        imageSrc = redImage;
+    }
+    else if (props.reveal === 'blue') {
+        imageSrc = blueImage;
+    }
+    else if (props.reveal === 'black') {
+        imageSrc = blackImage;
+    }
+
     if(props.hover){
         cardClass.push(classes.hover)
     }
