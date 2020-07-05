@@ -1,18 +1,9 @@
 const io = require('socket.io')(8080)
-const express= require('express')
-const path = require('path')
 const {addUser,getUser,removeUser,getUsersInRoom,becomeOperative,becomeSpymaster,switchTeams,changeNameOfUser} = require('./users.js')
 
-
-const app = express();
 /* app.use(express.static(path.join(__dirname, '..','./public')));
 console.log(path.join(__dirname, '..','./public')) */
-app.use(express.static(path.join(__dirname, "..", "build")));
 
-app.get('/', function (req, res) {
-    console.log(path.join(__dirname, '..', './public', 'index.html'))
-    res.sendFile(path.join(__dirname, '..', './build', 'index.html'));
-});
 
 
 const room='500';
