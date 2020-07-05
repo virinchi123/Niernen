@@ -30,7 +30,7 @@ const Centerpiece = props=>{
     let topCode=null;
     let botCode=null;
     let topText=null;
-    console.log(props.botState.number)
+    console.log(props)
     switch(props.status){
         case 1:
             topText='The Blue Spymaster is giving a clue';
@@ -101,7 +101,7 @@ topCode=<h2>{topText}</h2>
     return(
         <div className={classes.center} style={{ gridArea: `${props.gridArea}` }}>
             {topCode}
-            <CardList serverState={props.serverState} words={words} gridArea='center' logFunction={props.logFunction} user={props.user} nextFunction={props.nextFunction} status={props.status} taps={props.botState.number}/>
+            <CardList setImageState={props.setImageState} imageState={props.imageState} serverState={props.serverState} words={words} gridArea='center' logFunction={props.logFunction} user={props.user} nextFunction={props.nextFunction} status={props.status} taps={props.botState.number}/>
             {botCode}
         </div>
     )

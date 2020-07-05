@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React from 'react';
 import classes from './Card.module.css'
 import grayImage from '../../assets/card-gray-back.png';
 import redImage from '../../assets/card-red-back-1.png';
@@ -6,10 +6,6 @@ import blueImage from '../../assets/card-blue-back-4.png';
 import blackImage from '../../assets/card-black-back.png';
 
 const Card = props =>{
-
-    let [imageState,updateImageState]=useState({
-        show:false
-    })
 
     let imageSrc=grayImage
     let cardClass=[classes.card];
@@ -43,10 +39,7 @@ const Card = props =>{
 
     const clickHandler=(event)=>{
         if(props.click){
-            updateImageState({
-                show:true
-            })
-            props.click(event,props.word)
+            props.click(event,props.word,props.index)
         }
     }
 
@@ -56,7 +49,7 @@ const Card = props =>{
         </div>
     </div>)
 
-    if(imageState.show){
+    if(props.show){
         cardCode=<img src={imageSrc} alt='src'/>
     }
 

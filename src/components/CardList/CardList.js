@@ -24,9 +24,16 @@ const CardList = props =>{
         }
     },[props.taps,tapState])*/
 
-    const clickHandler=(event,word)=>{
+    const clickHandler=(event,word,index)=>{
         console.log(event)
         const logArray=[props.user.team,'tap',props.user.nickname,word]
+        const tempArray= [...props.imageState.show]
+        tempArray[index]=true
+        console.log(tempArray)
+        props.setImageState({
+            show: tempArray
+        })
+
         props.logFunction(logArray)
         if(props.nextFunction)
         {
@@ -47,9 +54,10 @@ const CardList = props =>{
         if(props.user.role==='Spymaster'){
             cardCode = props.words.map((el, index) => {
                 let type=props.serverState.types[index]
+                let show=props.imageState.show[index]
                 console.log(type)
                 return (
-                    <Card key={index} word={el} type={type} reveal={type}/>
+                    <Card key={index} word={el} type={type} reveal={type} show={show} index={index}/>
                 )
             })
         }
@@ -57,8 +65,9 @@ const CardList = props =>{
             cardCode=props.words.map((el,index)=>{
             //console.log(el)
                 let type = props.serverState.types[index]
+                let show = props.imageState.show[index]
                 return(
-                    <Card key={index} word={el} reveal={type}/>
+                    <Card key={index} word={el} reveal={type} show={show} index={index}/>
                 )
     })
         }
@@ -70,8 +79,9 @@ const CardList = props =>{
                 cardCode = props.words.map((el, index) => {
                     //console.log(el)
                     let type = props.serverState.types[index]
+                    let show = props.imageState.show[index]
                     return (
-                        <Card key={index} word={el} type={type} reveal={type}/>
+                        <Card key={index} word={el} type={type} reveal={type} show={show} index={index}/>
                     )
                 })
             }
@@ -80,8 +90,9 @@ const CardList = props =>{
                 cardCode = props.words.map((el, index) => {
                     //console.log(el)
                     let type = props.serverState.types[index]
+                    let show = props.imageState.show[index]
                     return (
-                        <Card key={index} word={el} click={clickHandler} hover={true} reveal={type}/>
+                        <Card key={index} word={el} click={clickHandler} hover={true} reveal={type} show={show} index={index}/>
                     )
                 })
             }
@@ -91,8 +102,9 @@ const CardList = props =>{
                 cardCode = props.words.map((el, index) => {
                     //console.log(el)
                     let type = props.serverState.types[index]
+                    let show = props.imageState.show[index]
                     return (
-                        <Card key={index} word={el} type={type} reveal={type} />
+                        <Card key={index} word={el} type={type} reveal={type} show={show} index={index}/>
                     )
                 })
             }
@@ -100,8 +112,9 @@ const CardList = props =>{
                 cardCode = props.words.map((el, index) => {
                     //console.log(el)
                     let type = props.serverState.types[index]
+                    let show = props.imageState.show[index]
                     return (
-                        <Card key={index} word={el} hover={true} reveal={type} />
+                        <Card key={index} word={el} hover={true} reveal={type} show={show} index={index}/>
                     )
                 })
             }
@@ -112,9 +125,10 @@ const CardList = props =>{
             if (props.user.role === 'Spymaster') {
                 cardCode = props.words.map((el, index) => {
                     //console.log(el)
+                    let show = props.imageState.show[index]
                     let type = props.serverState.types[index]
                     return (
-                        <Card key={index} word={el} type={type} reveal={type}/>
+                        <Card key={index} word={el} type={type} reveal={type} show={show} index={index}/>
                     )
                 })
             }
@@ -122,8 +136,9 @@ const CardList = props =>{
                 cardCode = props.words.map((el, index) => {
                     //console.log(el)
                     let type = props.serverState.types[index]
+                    let show = props.imageState.show[index]
                     return (
-                        <Card key={index} word={el} click={clickHandler} hover={true} reveal={type}/>
+                        <Card key={index} word={el} click={clickHandler} hover={true} reveal={type} show={show} index={index}/>
                     )
                 })
             }
@@ -133,8 +148,9 @@ const CardList = props =>{
                 cardCode = props.words.map((el, index) => {
                     //console.log(el)
                     let type = props.serverState.types[index]
+                    let show = props.imageState.show[index]
                     return (
-                        <Card key={index} word={el} type={type} reveal={type}/>
+                        <Card key={index} word={el} type={type} reveal={type} show={show} index={index}/>
                     )
                 })
             }
@@ -142,8 +158,9 @@ const CardList = props =>{
                 cardCode = props.words.map((el, index) => {
                     //console.log(el)
                     let type = props.serverState.types[index]
+                    let show = props.imageState.show[index]
                     return (
-                        <Card key={index} word={el} hover={true} reveal={type}/>
+                        <Card key={index} word={el} hover={true} reveal={type} show={show} index={index}/>
                     )
                 })
             }

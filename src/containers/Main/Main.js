@@ -63,6 +63,20 @@ const Main = props=>{
         number: '2'
     })
 
+    let [imageState, updatedImageState] = useState({
+        show: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+    })
+
+    const updateImageState=data=>{
+        socket.emit('shown',data.show)
+        updatedImageState(data)
+    }
+
+    let [scoreState,updateScoreState] = useState({
+        red:8,
+        blue:9
+    })
+
     useEffect(()=>{
         socket.emit('join', {
             id: socket.id, user: {
@@ -77,6 +91,7 @@ const Main = props=>{
                 reveal:data.reveal,
                 types:data.types
             })
+            updatedImageState({show:data.reveal})
             updateWordState({words:data.words})
         })
         socket.on('currentStatus',status=>{
@@ -306,6 +321,42 @@ const Main = props=>{
         })
     })
 
+    socket.off('cardShown').on('cardShown',data=>{
+        console.log(data)
+        updateServerState({
+            ...serverState,
+            reveal:data
+        })
+        updatedImageState({
+            show:data
+        })
+    })
+
+    useEffect(()=>{
+        console.log('cardmat ',serverState.types)
+        const dummyState=[...serverState.types]
+        const dummyImageState=[...imageState.show]
+        let redScore=0;
+        let blueScore=0;
+        for(let i=0;i<imageState.length;i++){
+            if(dummyImageState[i]===true){
+                if(dummyState[i]==='red'){
+                    redScore++
+                }
+                else if(dummyState[i]==='blue'){
+                    blueScore++
+                }
+            }
+        }
+        //console.log('red score ',redScore)
+        //console.log('blue score ', blueScore)
+        redScore=8-redScore;
+        blueScore=9-blueScore;
+        updateScoreState({
+            redScore:redScore,
+            blueScore: blueScore
+        })
+    },[imageState,serverState.types])
 
     const addLogMessage=array=>{
         const dummyState={...logState};
@@ -435,6 +486,7 @@ const Main = props=>{
     }
 
     const changeBotState=data=>{
+        console.log(data)
         socket.emit('setClue',data);
         updateBotState(data)
     }
@@ -505,9 +557,9 @@ const Main = props=>{
     return(
         <div className={classes.main}>
             <TopBar gridArea='topbar' userState={userState} changeFunction={updateUserState} formFunction={showModal} players={operativesState.blueOperatives.length+operativesState.blueSpymasters.length+operativesState.redOperatives.length+operativesState.redSpyMasters.length}/>
-            <Sidebar gridArea='leftcol' type='red' number='9' operatives={operativesState.redOperatives} spymasters={operativesState.redSpyMasters}/>
+            <Sidebar gridArea='leftcol' type='red' number={scoreState.red} operatives={operativesState.redOperatives} spymasters={operativesState.redSpyMasters}/>
             <div className={classes.rightcol}>
-                <Sidebar type='blue' number='8' operatives={operativesState.blueOperatives} spymasters={operativesState.blueSpymasters}/>
+                <Sidebar type='blue' number={scoreState.blue} operatives={operativesState.blueOperatives} spymasters={operativesState.blueSpymasters}/>
                 <Log messages={logState.messages}/>
             </div>
             <Modal show={modalState.show} backHandler={noModal}>
@@ -516,7 +568,7 @@ const Main = props=>{
                     <button className={classes.spyMasterButton} onClick={becomeSpymaster}>Become Spymaster</button>
                     <button className={classes.switchTeamsButton} onClick={switchTeams}>Switch Teams</button>
             </Modal>
-            <Centerpiece serverState={serverState} botState={botState} changeBotState={changeBotState} gridArea='center' words={wordState.words} status={gameState.status} clue="bot" number="2" nextFunction={progressFunction} user={userState} logFunction={addLogMessage}/>
+            <Centerpiece setImageState={updateImageState} imageState={imageState} serverState={serverState} botState={botState} changeBotState={changeBotState} gridArea='center' words={wordState.words} status={gameState.status} clue="bot" number="2" nextFunction={progressFunction} user={userState} logFunction={addLogMessage}/>
         </div>
     )
 }
