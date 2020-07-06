@@ -8,6 +8,7 @@ import Modal from '../../components/Modal/Modal';
 import FormElement from '../../components/FormElement/FormElement';
 import blueBG from '../../assets/bg-blue.jpg'
 import redBG from '../../assets/bg-red.jpg'
+import queryString from 'query-string'
 const io = require('socket.io-client')
 const socket = io('http://localhost:8080')
 
@@ -33,12 +34,16 @@ const Main = props=>{
     const [operativesState,updatedOperativesState]=useState({
         blueOperatives:[],
         blueSpymasters:[],
-        redOperatives:['virinchi'],
+        redOperatives:[],
         redSpyMasters:[]
     })
 
     const [gameState,updateGameState]=useState({
         status:1
+    })
+
+    const [tapState, updateTapState] = useState({
+        taps: 2
     })
 
     const [logState,updateLogState]=useState({
@@ -78,13 +83,20 @@ const Main = props=>{
     })
 
     useEffect(()=>{
+        const { name, room,team,role } = queryString.parse(props.location.search)
         socket.emit('join', {
             id: socket.id, user: {
-                nickname: 'virinchi',
-                team: 'Red',
-                role: 'Operative'
+                nickname: name,
+                team: team,
+                role: role,
+                room: room
             }})
-        socket.on('words-ready',data=>{
+            updateUserState({
+                nickname: name,
+                team: team,
+                role: role,
+            })
+        socket.off('words-ready').on('words-ready',data=>{
             console.log(data)
             updateServerState({
                 words:data.words,
@@ -94,11 +106,12 @@ const Main = props=>{
             updatedImageState({show:data.reveal})
             updateWordState({words:data.words})
         })
-        socket.on('currentStatus',status=>{
+        socket.off('currentStatus').on('currentStatus',status=>{
             updateGameState({status:status})
         })
+        console.log('hi')
 
-    },[])
+    },[props.location.search])
 
     socket.off('currentPlayers').on('currentPlayers',data=>{
         const redOps = [];
@@ -339,15 +352,15 @@ const Main = props=>{
     })
 
     useEffect(()=>{
-        console.log('cardmat ',serverState.types)
+        //console.log('cardmat ',serverState.types)
         const dummyState=[...serverState.types]
         const dummyImageState=[...imageState.show]
-        console.log(dummyState)
-        console.log(dummyImageState)
+        //console.log(dummyState)
+        //console.log(dummyImageState)
         let redScore=0;
         let blueScore=0;
         for(let i=0;i<dummyState.length-1;i++){
-            console.log(dummyImageState[i])
+            //console.log(dummyImageState[i])
             if(dummyImageState[i]===true){
                 console.log('trudy')
                 if(dummyState[i]==='red'){
@@ -377,6 +390,11 @@ const Main = props=>{
             messages:dummyState.messages
         })
         socket.emit('addLog',array)
+    }
+
+    const broadcastStatus=data=>{
+        socket.emit('status',parseInt(data.status))
+        updateGameState(data)
     }
 
     const noModal=props=>{
@@ -566,7 +584,7 @@ const Main = props=>{
         socket.emit('reset',1)
     }
 
-    let centerCode = <Centerpiece setImageState={updateImageState} imageState={imageState} serverState={serverState} botState={botState} changeBotState={changeBotState} gridArea='center' words={wordState.words} status={gameState.status} clue="bot" number="2" nextFunction={progressFunction} user={userState} logFunction={addLogMessage} />;
+    let centerCode = <Centerpiece setImageState={updateImageState} imageState={imageState} serverState={serverState} botState={botState} changeBotState={changeBotState} gridArea='center' words={wordState.words} status={gameState.status} nextFunction={progressFunction} user={userState} logFunction={addLogMessage} />;
     if(scoreState.redScore===0&&gameState.status!==6){
         updateGameState({
             status:6
@@ -582,6 +600,7 @@ const Main = props=>{
         })
     }
 
+    centerCode = <Centerpiece gameState={gameState} updateGameState={broadcastStatus} tapState={tapState} updateTapState={updateTapState} serverState={serverState} updateServerState={updateServerState} setImageState={updateImageState} imageState={imageState} botState={botState} changeBotState={changeBotState} gridArea='center' words={wordState.words} status={gameState.status} clue="bot" number="2" nextFunction={progressFunction} user={userState} logFunction={addLogMessage} />;
     console.log(scoreState)
     console.log(wordState)
     return(

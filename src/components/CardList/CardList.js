@@ -1,31 +1,31 @@
-import React,{useState,useEffect} from 'react';
+import React,{useEffect} from 'react';
 import Card from '../Card/Card';
 import classes from './CardList.module.css';
 
 const CardList = props =>{
     let cardCode=null;
-    let [tapState,updateTapState]=useState({
-        taps:parseInt(props.taps)
-    })
     console.log(props)
 
+    const {updateTapState}=props
     useEffect(()=>{
         //console.log('updated '+props.taps)
         updateTapState({
             taps: parseInt(props.taps)
         })
-    },[props.taps])
-
-    /*useEffect(()=>{
-        if(tapState.taps===0){
-            updateTapState({
-                taps: parseInt(props.taps) + 1
-            })
-        }
-    },[props.taps,tapState])*/
+    },[props.taps,updateTapState])
 
     const clickHandler=(event,word,index)=>{
-        console.log(event)
+        //console.log(event)
+        let black=props.serverState.types.indexOf('black');
+        var indices = [];
+
+        props.serverState.types.forEach(function (currentItem, index) {
+            if (currentItem === "grey") {
+                indices.push(index);
+            }
+        });
+
+        console.log(indices);
         const logArray=[props.user.team,'tap',props.user.nickname,word]
         const tempArray= [...props.imageState.show]
         tempArray[index]=true
@@ -37,16 +37,31 @@ const CardList = props =>{
         props.logFunction(logArray)
         if(props.nextFunction)
         {
-            console.log(tapState.taps)
-            if(tapState.taps>0){
-                updateTapState({
-                    ...tapState,
-                    taps:tapState.taps-1
+            console.log(props.tapState.taps)
+            if(props.tapState.taps>0){
+                props.updateTapState({
+                    ...props.tapState,
+                    taps:props.tapState.taps-1
                 })
             }
             else{
                 props.nextFunction()
             }
+        }
+        if (index === black) {
+            if (props.user.team === 'Red') {
+                props.updateGameState({
+                    status:5
+                })
+            }
+            else{
+                props.updateGameState({
+                    status: 6
+                })
+            }
+        }
+        if(indices.includes(index)){
+            props.nextFunction()
         }
     }
 

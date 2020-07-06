@@ -1,3 +1,19 @@
+$colors:(
+    buttonYellow: rgb(255,228,0),
+    borderYellowBottom:rgb(243,287,0),
+    borderYellowTop:rgb(255,246,165),
+    buttonOrange: rgb(255,136,30),
+    lightRed: rgb(230,88,49),
+    darkRed: rgb(117,35,23),
+    lightBlue: rgb(123,202,233),
+    teamRed: rgb(143,43,28),
+    teamBlue: rgb(50,132,163)
+);
+
+@function color($color){
+    @return map-get($map: $colors, $key: $color)
+};
+
 .center{
     display: flex;
     flex-direction: column;
@@ -40,3 +56,25 @@
         }
     }
 }
+
+        .endGuessingButton{
+        padding: 0 1%;
+        border-radius: 100px;
+        background-color: color(buttonYellow);
+        border-top: 2px solid color(borderYellowTop);
+        border-bottom: 2px solid color(borderYellowBottom);
+        box-shadow: rgba(0, 0, 0, 0.5) 0.2rem 0.2rem 1px 0px;
+        height: 2em;
+        width: 150%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        cursor: pointer;
+
+        p{
+            margin: 0;
+
+        }
+
+        }

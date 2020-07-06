@@ -54,4 +54,32 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }
+
+.endGuessingButton {
+  padding: 0 1%;
+  border-radius: 100px;
+  background-color: #ffe400;
+  border-top: 2px solid #fff6a5;
+  border-bottom: 2px solid #f3ff00;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0.2rem 0.2rem 1px 0px;
+          box-shadow: rgba(0, 0, 0, 0.5) 0.2rem 0.2rem 1px 0px;
+  height: 2em;
+  width: 150%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  cursor: pointer;
+}
+
+.endGuessingButton p {
+  margin: 0;
+}
 /*# sourceMappingURL=Centerpiece.module.css.map */
