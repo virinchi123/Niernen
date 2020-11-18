@@ -72,7 +72,14 @@ const CardList = props =>{
                 let show=props.imageState.show[index]
                 console.log(type)
                 return (
-                    <Card key={index} word={el} type={type} reveal={type} show={show} index={index}/>
+                    <Card 
+                        key={index} 
+                        word={el} 
+                        type={type} 
+                        reveal={type} 
+                        show={show} 
+                        index={index}
+                    />
                 )
             })
         }
@@ -82,7 +89,13 @@ const CardList = props =>{
                 let type = props.serverState.types[index]
                 let show = props.imageState.show[index]
                 return(
-                    <Card key={index} word={el} reveal={type} show={show} index={index}/>
+                    <Card 
+                        key={index} 
+                        word={el} 
+                        reveal={type} 
+                        show={show} 
+                        index={index}
+                    />
                 )
     })
         }
@@ -96,7 +109,14 @@ const CardList = props =>{
                     let type = props.serverState.types[index]
                     let show = props.imageState.show[index]
                     return (
-                        <Card key={index} word={el} type={type} reveal={type} show={show} index={index}/>
+                        <Card 
+                            key={index} 
+                            word={el} 
+                            type={type} 
+                            reveal={type} 
+                            show={show} 
+                            index={index}
+                        />
                     )
                 })
             }
@@ -107,7 +127,15 @@ const CardList = props =>{
                     let type = props.serverState.types[index]
                     let show = props.imageState.show[index]
                     return (
-                        <Card key={index} word={el} click={clickHandler} hover={true} reveal={type} show={show} index={index}/>
+                        <Card 
+                            key={index} 
+                            word={el} 
+                            click={clickHandler} 
+                            hover={true} 
+                            reveal={type} 
+                            show={show} 
+                            index={index}
+                        />
                     )
                 })
             }
@@ -119,7 +147,14 @@ const CardList = props =>{
                     let type = props.serverState.types[index]
                     let show = props.imageState.show[index]
                     return (
-                        <Card key={index} word={el} type={type} reveal={type} show={show} index={index}/>
+                        <Card 
+                            key={index} 
+                            word={el} 
+                            type={type} 
+                            reveal={type} 
+                            show={show} 
+                            index={index}
+                        />
                     )
                 })
             }
@@ -129,7 +164,14 @@ const CardList = props =>{
                     let type = props.serverState.types[index]
                     let show = props.imageState.show[index]
                     return (
-                        <Card key={index} word={el} hover={true} reveal={type} show={show} index={index}/>
+                        <Card 
+                            key={index} 
+                            word={el} 
+                            hover={true} 
+                            reveal={type} 
+                            show={show} 
+                            index={index}
+                        />
                     )
                 })
             }
@@ -143,7 +185,14 @@ const CardList = props =>{
                     let show = props.imageState.show[index]
                     let type = props.serverState.types[index]
                     return (
-                        <Card key={index} word={el} type={type} reveal={type} show={show} index={index}/>
+                        <Card 
+                            key={index} 
+                            word={el} 
+                            type={type} 
+                            reveal={type} 
+                            show={show} 
+                            index={index}
+                        />
                     )
                 })
             }
@@ -153,7 +202,15 @@ const CardList = props =>{
                     let type = props.serverState.types[index]
                     let show = props.imageState.show[index]
                     return (
-                        <Card key={index} word={el} click={clickHandler} hover={true} reveal={type} show={show} index={index}/>
+                        <Card 
+                            key={index} 
+                            word={el} 
+                            click={clickHandler} 
+                            hover={true} 
+                            reveal={type} 
+                            show={show} 
+                            index={index}
+                        />
                     )
                 })
             }
@@ -165,7 +222,14 @@ const CardList = props =>{
                     let type = props.serverState.types[index]
                     let show = props.imageState.show[index]
                     return (
-                        <Card key={index} word={el} type={type} reveal={type} show={show} index={index}/>
+                        <Card 
+                            key={index} 
+                            word={el} 
+                            type={type} 
+                            reveal={type} 
+                            show={show} 
+                            index={index}
+                        />
                     )
                 })
             }
@@ -175,7 +239,14 @@ const CardList = props =>{
                     let type = props.serverState.types[index]
                     let show = props.imageState.show[index]
                     return (
-                        <Card key={index} word={el} hover={true} reveal={type} show={show} index={index}/>
+                        <Card 
+                            key={index} 
+                            word={el} 
+                            hover={true} 
+                            reveal={type} 
+                            show={show} 
+                            index={index}
+                        />
                     )
                 })
             }
