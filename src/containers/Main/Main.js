@@ -10,21 +10,29 @@ import blueBG from '../../assets/bg-blue.jpg'
 import redBG from '../../assets/bg-red.jpg'
 import queryString from 'query-string'
 const io = require('socket.io-client')
-const socket = io('http://localhost:8080')
+const options = {
+
+    secure: true,
+
+    reconnect: true,
+
+    rejectUnauthorized: false
+
+};
+const socket = io.connect('http://localhost:8080',options)
 
 
 const Main = props=>{
 
-    const [userState,updateUserState]=useState({
+    const [userState,updateUserState]=useState({ //holds the details of the user
         nickname:'virinchi',
         team:'Red',
         role:'Operative'
     })
 
     const [serverState,updateServerState]=useState({
-        words:[],
-        reveal:[],
-        types:[]
+        reveal:[], //holds array of true and false, with true for card being revealed and false otherwise
+        types:[] //
     })
 
     const [modalState,updateModalState]=useState({
@@ -35,29 +43,28 @@ const Main = props=>{
         blueOperatives:[],
         blueSpymasters:[],
         redOperatives:[],
-        redSpyMasters:[]
+        redSpymasters:[]
     })
 
     const [gameState,updateGameState]=useState({
         status:1
+        /*Status: {
+            1:blue spymaster is giving clue,
+            2:red spymaster is giving clue,
+            3:blue team is guessing,
+            4:red team is guessing,
+            5:blue team has won,
+            6:red team has won
+        }*/
     })
 
     const [tapState, updateTapState] = useState({
-        taps: 2
+        taps: 2 //number of taps left
     })
 
     const [logState,updateLogState]=useState({
         messages :[['red', 'clue', 'masterDummy', 'SDF', '2'], ['red', 'tap', 'dummy1', 'board'], ['red', 'tap', 'dummy2', 'film']]
     })
-
-    const updateOperativesState = data=>{
-        updatedOperativesState({
-            blueOperatives: data.blueOperatives,
-            redOperatives: data.redOperatives,
-            blueSpymasters: data.blueSpymasters,
-            redSpyMasters: data.redSpyMasters
-        });
-    }
 
     const [wordState,updateWordState]=useState({
         words:[]
@@ -72,15 +79,24 @@ const Main = props=>{
         show: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
     })
 
-    const updateImageState=data=>{
-        socket.emit('shown',data.show)
-        updatedImageState(data)
-    }
-
     let [scoreState,updateScoreState] = useState({
         redScore:8,
         blueScore:9
     })
+
+    const updateOperativesState = data=>{
+        updatedOperativesState({
+            blueOperatives: data.blueOperatives,
+            redOperatives: data.redOperatives,
+            blueSpymasters: data.blueSpymasters,
+            redSpymasters: data.redSpymasters
+        });
+    }
+
+    const updateImageState=data=>{
+        socket.emit('shown',data.show)
+        updatedImageState(data)
+    }
 
     useEffect(()=>{
         const { name, room,team,role } = queryString.parse(props.location.search)
@@ -138,7 +154,7 @@ const Main = props=>{
         const obj={
             redOperatives:redOps,
             blueOperatives:blueOps,
-            redSpyMasters:redSpy,
+            redSpymasters:redSpy,
             blueSpymasters:blueSpy
         }
         updateOperativesState(obj)
@@ -154,7 +170,7 @@ const Main = props=>{
             else{
                 updateOperativesState({
                     ...operativesState,
-                    redSpyMasters: [...operativesState.redSpyMasters, user.name]
+                    redSpymasters: [...operativesState.redSpymasters, user.name]
                 })
             }
         }else{
@@ -184,8 +200,8 @@ const Main = props=>{
                 dummyState.redOperatives.splice(index,1)
             }
             else {
-                index = dummyState.redSpyMasters.findIndex(el => el === user.name)
-                dummyState.redSpyMasters.splice(index, 1)
+                index = dummyState.redSpymasters.findIndex(el => el === user.name)
+                dummyState.redSpymasters.splice(index, 1)
             }
         } else {
             if (user.role === 'Operative') {
@@ -215,11 +231,11 @@ const Main = props=>{
                 })
             }
             else {
-                //index = dummyState.redSpyMasters.findIndex(el => el === oldName)
-                //dummyState.redSpyMasters[index] = user.name;
+                //index = dummyState.redSpymasters.findIndex(el => el === oldName)
+                //dummyState.redSpymasters[index] = user.name;
                 updateOperativesState({
                     ...operativesState,
-                    redSpyMasters: [...operativesState.redSpyMasters.filter(el => el !== oldName), user.name]
+                    redSpymasters: [...operativesState.redSpymasters.filter(el => el !== oldName), user.name]
                 })
             }
         } else {
@@ -252,7 +268,7 @@ const Main = props=>{
             if (user.role === 'Operative') {
                 index = dummyState.redOperatives.findIndex(el => el === user.nickname)
                 dummyState.redOperatives.splice(index, 1)
-                dummyState.redSpyMasters.push(user.nickname)
+                dummyState.redSpymasters.push(user.nickname)
             }
         } else {
             if (user.role === 'Operative') {
@@ -269,8 +285,8 @@ const Main = props=>{
         let index
         if (user.team === 'Red') {
             if (user.role === 'Spymaster') {
-                index = dummyState.redSpyMasters.findIndex(el => el === user.nickname)
-                dummyState.redSpyMasters.splice(index, 1)
+                index = dummyState.redSpymasters.findIndex(el => el === user.nickname)
+                dummyState.redSpymasters.splice(index, 1)
                 dummyState.redOperatives.push(user.nickname)
             }
         } else {
@@ -294,8 +310,8 @@ const Main = props=>{
                 dummyState.blueOperatives.push(user.nickname)
             }
             else {
-                index = dummyState.redSpyMasters.findIndex(el => el === user.nickname)
-                dummyState.redSpyMasters.splice(index, 1)
+                index = dummyState.redSpymasters.findIndex(el => el === user.nickname)
+                dummyState.redSpymasters.splice(index, 1)
                 dummyState.blueSpymasters.push(user.nickname)
             }
         } else {
@@ -307,7 +323,7 @@ const Main = props=>{
             else {
                 index = dummyState.blueSpymasters.findIndex(el => el === user.nickname)
                 dummyState.blueSpymasters.splice(index, 1)
-                dummyState.redSpyMasters.push(user.nickname)
+                dummyState.redSpymasters.push(user.nickname)
             }
         }
         updateOperativesState({ ...dummyState })
@@ -423,8 +439,8 @@ const Main = props=>{
                 dummyState.redOperatives[index]=event.target.value
             }
             else {
-                index = dummyState.redSpyMasters.findIndex(el => el === user.nickname)
-                dummyState.redSpyMasters[index] = event.target.value
+                index = dummyState.redSpymasters.findIndex(el => el === user.nickname)
+                dummyState.redSpymasters[index] = event.target.value
             }
         } else {
             if (user.role === 'Operative') {
@@ -477,7 +493,7 @@ const Main = props=>{
         const dummyState={...operativesState};
         if(usState.team==='Red'){
             dummyState.redOperatives=removeFromList(dummyState.redOperatives,usState.nickname);
-            dummyState.redSpyMasters.push(usState.nickname)
+            dummyState.redSpymasters.push(usState.nickname)
             updateOperativesState(dummyState)
         }
         else{
@@ -502,7 +518,7 @@ const Main = props=>{
         })
         const dummyState={...operativesState}
         if (usState.team === 'Red') {
-            dummyState.redSpyMasters = removeFromList(dummyState.redSpyMasters, userState.nickname);
+            dummyState.redSpymasters = removeFromList(dummyState.redSpymasters, userState.nickname);
             dummyState.redOperatives.push(userState.nickname)
             updateOperativesState(dummyState)
         }
@@ -537,7 +553,7 @@ const Main = props=>{
                 updateOperativesState(opState)
             }
             else{
-                opState.redSpyMasters=removeFromList(opState.redSpyMasters, dummyState.nickname);
+                opState.redSpymasters=removeFromList(opState.redSpymasters, dummyState.nickname);
                 opState.blueSpymasters.push(dummyState.nickname)
                 //addSpymaster(dummyState.nickname, 'Blue')
                 updateOperativesState(opState)
@@ -559,7 +575,7 @@ const Main = props=>{
             }
             else {
                 opState.blueSpymasters=removeFromList(opState.blueSpymasters, dummyState.nickname);
-                opState.redSpyMasters.push(dummyState.nickname)
+                opState.redSpymasters.push(dummyState.nickname)
                 //addSpymaster(dummyState.name, 'Red')
                 updateOperativesState(opState)
             }
@@ -584,7 +600,18 @@ const Main = props=>{
         socket.emit('reset',1)
     }
 
-    let centerCode = <Centerpiece setImageState={updateImageState} imageState={imageState} serverState={serverState} botState={botState} changeBotState={changeBotState} gridArea='center' words={wordState.words} status={gameState.status} nextFunction={progressFunction} user={userState} logFunction={addLogMessage} />;
+    let centerCode = <Centerpiece 
+                        setImageState={updateImageState}
+                        imageState={imageState} 
+                        serverState={serverState} 
+                        botState={botState} 
+                        changeBotState={changeBotState} 
+                        gridArea='center' 
+                        words={wordState.words} 
+                        status={gameState.status} 
+                        nextFunction={progressFunction} 
+                        user={userState} 
+                        logFunction={addLogMessage} />;
     if(scoreState.redScore===0&&gameState.status!==6){
         updateGameState({
             status:6
@@ -600,13 +627,31 @@ const Main = props=>{
         })
     }
 
-    centerCode = <Centerpiece gameState={gameState} updateGameState={broadcastStatus} tapState={tapState} updateTapState={updateTapState} serverState={serverState} updateServerState={updateServerState} setImageState={updateImageState} imageState={imageState} botState={botState} changeBotState={changeBotState} gridArea='center' words={wordState.words} status={gameState.status} clue="bot" number="2" nextFunction={progressFunction} user={userState} logFunction={addLogMessage} />;
+    centerCode = <Centerpiece 
+        gameState={gameState} 
+        updateGameState={broadcastStatus} 
+        tapState={tapState} 
+        updateTapState={updateTapState} 
+        serverState={serverState} 
+        updateServerState={updateServerState} 
+        setImageState={updateImageState} 
+        imageState={imageState} 
+        botState={botState} 
+        changeBotState={changeBotState} 
+        gridArea='center' 
+        words={wordState.words} 
+        status={gameState.status} 
+        clue="bot" 
+        number="2" 
+        nextFunction={progressFunction} 
+        user={userState} 
+        logFunction={addLogMessage} />;
     console.log(scoreState)
     console.log(wordState)
     return(
         <div className={classes.main}>
-            <TopBar gridArea='topbar' resetFunction={resetFunction} userState={userState} changeFunction={updateUserState} formFunction={showModal} players={operativesState.blueOperatives.length+operativesState.blueSpymasters.length+operativesState.redOperatives.length+operativesState.redSpyMasters.length}/>
-            <Sidebar gridArea='leftcol' type='red' number={scoreState.redScore} operatives={operativesState.redOperatives} spymasters={operativesState.redSpyMasters}/>
+            <TopBar gridArea='topbar' resetFunction={resetFunction} userState={userState} changeFunction={updateUserState} formFunction={showModal} players={operativesState.blueOperatives.length+operativesState.blueSpymasters.length+operativesState.redOperatives.length+operativesState.redSpymasters.length}/>
+            <Sidebar gridArea='leftcol' type='red' number={scoreState.redScore} operatives={operativesState.redOperatives} spymasters={operativesState.redSpymasters}/>
             <div className={classes.rightcol}>
                 <Sidebar type='blue' number={scoreState.blueScore} operatives={operativesState.blueOperatives} spymasters={operativesState.blueSpymasters}/>
                 <Log messages={logState.messages}/>
@@ -625,11 +670,3 @@ const Main = props=>{
 export default Main;
 
 
-/*Status: {
-    1:blue spymaster is giving clue,
-    2:red spymaster is giving clue,
-    3:blue team is guessing,
-    4:red team is guessing,
-    5:blue team has won,
-    6:red team has won
-}*/

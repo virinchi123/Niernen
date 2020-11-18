@@ -55,7 +55,7 @@ const Centerpiece = props=>{
     }
     if(props.status===3||props.status===4){
         let guessCode=null;
-        if(props.user.team==='Red'&&props.status===4){
+        if(props.user.team==='Red'&&props.status===4&&props.user.role==='Spymaster'){
             guessCode = <button className={classes.endGuessingButton} type='button' onClick={props.nextFunction}>End Guessing</button>
         }
         else if(props.user.team==='Blue'&&props.status===3){
@@ -109,7 +109,23 @@ topCode=<h2>{topText}</h2>
     return(
         <div className={classes.center} style={{ gridArea: `${props.gridArea}` }}>
             {topCode}
-            <CardList serverState={props.serverState} updateServerState={props.updateServerState} tapState={props.tapState} updateTapState={props.updateTapState} black={props.black} setImageState={props.setImageState} imageState={props.imageState} words={words} gridArea='center' logFunction={props.logFunction} user={props.user} nextFunction={props.nextFunction} gameState={props.gameState} updateGameState={props.updateGameState} status={props.status} taps={props.botState.number}/>
+            <CardList 
+                serverState={props.serverState} 
+                updateServerState={props.updateServerState} 
+                tapState={props.tapState} 
+                updateTapState={props.updateTapState} 
+                black={props.black} 
+                setImageState={props.setImageState} 
+                imageState={props.imageState} 
+                words={words}
+                gridArea='center' 
+                logFunction={props.logFunction} 
+                user={props.user} 
+                nextFunction={props.nextFunction} 
+                gameState={props.gameState} 
+                updateGameState={props.updateGameState} 
+                status={props.status} 
+                taps={props.botState.number}/>
             {botCode}
         </div>
     )
