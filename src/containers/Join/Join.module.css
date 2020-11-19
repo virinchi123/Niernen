@@ -15,7 +15,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background-color: #1A1A1D;
+  background-color: #1a1a1d;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
@@ -40,15 +40,15 @@
 }
 
 .button {
-  color: #fff !important;
+  color: #fff;
   text-transform: uppercase;
   text-decoration: none;
-  background: #2979FF;
+  background: #2979ff;
   padding: 20px;
   border-radius: 5px;
   display: inline-block;
   border: none;
-  width: 100%;
+  width: 15vh;
 }
 
 .mt20 {

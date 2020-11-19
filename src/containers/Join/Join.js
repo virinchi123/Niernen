@@ -1,13 +1,29 @@
-import React,{useState} from 'react';
-import {Link} from 'react-router-dom';
-import classes from './Join.module.css'
+import React,{useState,useEffect} from 'react';
+import classes from './Join.module.css';
+import { useLocation,useHistory } from 'react-router-dom'
 
 const Join = props =>{
+
+    console.log(props)
 
     const [name,setName]=useState('')
     const [room, setRoom] = useState('')
     const [role,setRole]=useState('Operative')
     const[team,setTeam]=useState('Red')
+    const location=useLocation();
+    
+    useEffect(()=>{
+        console.log('here')
+        console.log(location)
+        if(!location.pathname.startsWith('/game')){
+            props.setInGame(false)
+        }
+    },[props])
+    const history=useHistory()
+    const signIn=()=>{
+        props.setInGame(true);
+        history.push(`/game?name=${name}&room=${room}&team=${team}&role=${role}`);
+    }
 
     return(
         <div className={classes.joinOuterContainer}>
@@ -30,9 +46,7 @@ const Join = props =>{
                     <option value="Blue" onClick={() => setTeam('Blue')}>Blue</option>
                 </select>
             </div>
-            <Link to={`/game?name=${name}&room=${room}&team=${team}&role=${role}`}>
-                <button type="button" className={[classes.button,classes.mt20].join(' ')}>Sign In</button>
-            </Link>
+                <button type="button" className={[classes.button,classes.mt20].join(' ')} onClick={signIn}>Sign In</button>
         </div>
     )
 }

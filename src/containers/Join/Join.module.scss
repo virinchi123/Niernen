@@ -8,7 +8,7 @@
   text-align: center;
   height: 100vh;
   align-items: center;
-  background-color: #1A1A1D;
+  background-color: #1a1a1d;
   flex-direction: column;
 }
 
@@ -30,15 +30,15 @@
 }
 
 .button {
-    color: #fff !important;
-    text-transform: uppercase;
-    text-decoration: none;
-    background: #2979FF;
-    padding: 20px;
-    border-radius: 5px;
-    display: inline-block;
-    border: none;
-    width: 100%;
+  color: #fff;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: #2979ff;
+  padding: 20px;
+  border-radius: 5px;
+  display: inline-block;
+  border: none;
+  width: 15vh;
 }
 
 .mt20 {
@@ -53,8 +53,6 @@
   .joinInnerContainer {
     width: 90%;
   }
-
-
 }
 
 button:focus {

@@ -37,12 +37,17 @@ const CardList = props =>{
         props.logFunction(logArray)
         if(props.nextFunction)
         {
+            let taps = props.tapState.taps;
             console.log(props.tapState.taps)
-            if(props.tapState.taps>0){
+            if(taps>0){
+                taps--;
                 props.updateTapState({
                     ...props.tapState,
-                    taps:props.tapState.taps-1
+                    taps:taps
                 })
+                if(taps===0){
+                    props.nextFunction();
+                }
             }
             else{
                 props.nextFunction()

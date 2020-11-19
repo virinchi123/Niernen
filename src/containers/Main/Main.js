@@ -1,4 +1,5 @@
 import React,{useState, useEffect} from 'react';
+import {useLocation} from 'react-router-dom';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import TopBar from '../../components/Topbar/Topbar';
 import classes from './Main.module.css';
@@ -9,7 +10,8 @@ import FormElement from '../../components/FormElement/FormElement';
 import blueBG from '../../assets/bg-blue.jpg'
 import redBG from '../../assets/bg-red.jpg'
 import queryString from 'query-string'
-const io = require('socket.io-client')
+const io = require('socket.io-client');
+
 const options = {
 
     secure: true,
@@ -19,10 +21,53 @@ const options = {
     rejectUnauthorized: false
 
 };
-const socket = io.connect('http://localhost:8080',options)
-
 
 const Main = props=>{
+
+    console.log(props)
+    
+    const location = useLocation();
+
+    let socket=io.connect('http://localhost:8080',options);
+
+    useEffect(()=>{
+        //socket = io.connect('http://localhost:8080',options)
+        console.log('location changed')
+        console.log(location)
+        const { name, room,team,role } = queryString.parse(location.search)
+        socket.emit('join', {
+            id: socket.id, user: {
+                nickname: name,
+                team: team,
+                role: role,
+                room: room
+            }})
+            console.log('joining on client')
+            updateUserState({
+                nickname: name,
+                team: team,
+                role: role,
+            })
+        socket.off('words-ready').on('words-ready',data=>{
+            console.log(data)
+            updateServerState({
+                reveal:data.reveal,
+                types:data.types
+            })
+            updatedImageState({show:data.reveal})
+            updateWordState({words:data.words})
+        })
+        socket.off('currentStatus').on('currentStatus',status=>{
+            updateGameState({status:status})
+        })
+        console.log('hi')
+
+        return ()=>{
+            console.log('tried to disconnect');
+            socket.emit('clientDisconnect')
+        }
+
+    },[location])
 
     const [userState,updateUserState]=useState({ //holds the details of the user
         nickname:'virinchi',
@@ -98,36 +143,7 @@ const Main = props=>{
         updatedImageState(data)
     }
 
-    useEffect(()=>{
-        const { name, room,team,role } = queryString.parse(props.location.search)
-        socket.emit('join', {
-            id: socket.id, user: {
-                nickname: name,
-                team: team,
-                role: role,
-                room: room
-            }})
-            updateUserState({
-                nickname: name,
-                team: team,
-                role: role,
-            })
-        socket.off('words-ready').on('words-ready',data=>{
-            console.log(data)
-            updateServerState({
-                words:data.words,
-                reveal:data.reveal,
-                types:data.types
-            })
-            updatedImageState({show:data.reveal})
-            updateWordState({words:data.words})
-        })
-        socket.off('currentStatus').on('currentStatus',status=>{
-            updateGameState({status:status})
-        })
-        console.log('hi')
-
-    },[props.location.search])
+    
 
     socket.off('currentPlayers').on('currentPlayers',data=>{
         const redOps = [];
@@ -194,6 +210,7 @@ const Main = props=>{
     socket.off('removeUser').on('removeUser',user=>{
         let dummyState = {...operativesState}
         let index
+        console.log('removing user')
         if (user.team === 'Red') {
             if (user.role === 'Operative') {
                 index=dummyState.redOperatives.findIndex(el=>el===user.name)
